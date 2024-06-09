@@ -1734,7 +1734,7 @@ progress {
       width: 230px; } }
   @media only screen and (max-width: 1199px) {
     .card  .exp-search-area {
-      display: none; } }
+      width: 180px; } }
 /* --------------------------------- */
 .form-control {
   display: block;
