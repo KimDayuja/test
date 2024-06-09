@@ -9,13 +9,135 @@
 	<!-- PAGE TITLE HERE -->
 	<title>Admin</title>
 	
-	<link href="Dashboard/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
-	<link rel="stylesheet" href="Dashboard/vendor/nouislider/nouislider.min.css">
+	<link href="<?=ROOT?>/assets/Dashboard/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+	<link rel="stylesheet" href="<?=ROOT?>/assets/Dashboard/vendor/nouislider/nouislider.min.css">
 	<!-- Style css -->
-    <link href="Dashboard/css/2style.css" rel="stylesheet">
+    <link href="<?=ROOT?>/assets/Dashboard/css/2style.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0-alpha1/css/bootstrap.min.css" rel="stylesheet">  
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0-alpha1/css/bootstrap.min.css" rel="stylesheet"> 
+    <link href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css" rel="stylesheet">
+
+    <style>
+
+            
+        /* Custom styles for DataTables */
+        .dataTables_wrapper .dataTables_filter {
+            /* Search then search bar */
+            float: right;
+            text-align: right;
+            margin-right: 30px;
+
+        }
+
+        .dataTables_wrapper .dataTables_filter label input {
+            margin-left: 8px; /* Adjust this value as needed */
+        }
+
+        /* Custom styles for DataTables sorting arrows */
+        .dataTables_wrapper .dataTables_sorter:after {
+            content: '\2191\2193'; /* Default arrows */
+            color: black;
+            margin-left: 5px;
+        }
+
+        .dataTables_wrapper .dataTables_length {
+            /* Show [10] Entries */
+            float: left;
+            margin-left: 30px;
+        }
+
+        .dataTables_wrapper .dataTables_info {
+            /* Showing 1 to 10 of 15 entries */
+            float: left;
+            margin-left: 30px;
+        }
+
+        .dataTables_wrapper .dataTables_paginate {
+            /* Previous 1 2 Next */
+            float: right;
+            margin-right: 30px;
+        }
+
+        /* Custom styles for DataTables sorting arrows */
+        th.sorting:after,
+        th.sorting_asc:after,
+        th.sorting_desc:after {
+            color: black;
+            margin-left: 5px; /* Space between text and sorting icon */
+        }
+
+        th.sorting:after {
+            content: '\2191\2193'; /* Up and down arrows */
+        }
+
+        th.sorting_asc:after {
+            content: '\2191'; /* Up arrow */
+        }
+
+        th.sorting_desc:after {
+            content: '\2193'; /* Down arrow */
+        }
+
+        /* Show horizontal scrollbar */
+        .table-responsive {
+            overflow-x: auto;
+            overflow-y: hidden; /* Hide vertical scrollbar */
+            -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on iOS */
+        }
+
+        /* Optional: If you want to style the horizontal scrollbar */
+        .table-responsive::-webkit-scrollbar {
+            height: 10px; /* Height of horizontal scrollbar */
+            background-color: #f1f1f1; /* Background color of scrollbar */
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background-color: #888; /* Color of scrollbar thumb */
+            border-radius: 5px; /* Rounded corners of thumb */
+        }
+
+        #transactions-table_previous {
+            width: 100px; /* Adjust the width as needed */
+            display: inline-block; /* Ensures the width is respected */
+            border: solid black 10px;
+            text-align: center; /* Center align text */
+        }
+
+        #transactions-table_next {
+            width: 70px; /* Adjust the width as needed */
+            display: inline-block; /* Ensures the width is respected */
+            border: solid black 10px;
+            text-align: center; /* Center align text */
+        }
+
+        .paginate_button {
+            width: 150px0px; /* Adjust the width as needed */
+            display: inline-block; /* Ensures the width is respected */
+            text-align: center; /* Center align text */
+            padding: 8px 12px; /* Padding for better click area */
+            border: solid black 1px; /* Border for button */
+            cursor: pointer; /* Cursor style */
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
+            margin-right: 10px; /* Margin between buttons */
+        }
+
+        .paginate_button.current {
+            background-color: #f0f0f0; /* Background color for current page */
+        }
+
+        .paginate_button:hover {
+            background-color: #ccc; /* Background color on hover */
+        }
+
+        .paginate_button.disabled {
+            pointer-events: none; /* Disable pointer events for disabled state */
+            opacity: 0.5; /* Reduce opacity for disabled state */
+            cursor: default; /* Change cursor to default for disabled state */
+        }
+
+
+    </style>
 
 </head>
 
@@ -51,7 +173,7 @@
             Nav header start
         ***********************************-->
         <div class="nav-header">
-            <a href="#" class="brand-logo">
+            <a href="index.html" class="brand-logo">
 				<svg class="logo-abbr" width="53" height="53" viewBox="0 0 53 53">
 					<path class="svg-logo-primary-path" d="M48.3418 41.8457H41.0957C36.8148 41.8457 33.332 38.3629 33.332 34.082C33.332 29.8011 36.8148 26.3184 41.0957 26.3184H48.3418V19.2275C48.3418 16.9408 46.4879 15.0869 44.2012 15.0869H4.14062C1.85386 15.0869 0 16.9408 0 19.2275V48.8594C0 51.1462 1.85386 53 4.14062 53H44.2012C46.4879 53 48.3418 51.1462 48.3418 48.8594V41.8457Z" fill="#5BCFC5"/>
 					<path class="svg-logo-primary-path" d="M51.4473 29.4238H41.0957C38.5272 29.4238 36.4375 31.5135 36.4375 34.082C36.4375 36.6506 38.5272 38.7402 41.0957 38.7402H51.4473C52.3034 38.7402 53 38.0437 53 37.1875V30.9766C53 30.1204 52.3034 29.4238 51.4473 29.4238ZM41.0957 35.6348C40.2382 35.6348 39.543 34.9396 39.543 34.082C39.543 33.2245 40.2382 32.5293 41.0957 32.5293C41.9532 32.5293 42.6484 33.2245 42.6484 34.082C42.6484 34.9396 41.9532 35.6348 41.0957 35.6348Z" fill="#5BCFC5"/>
@@ -167,7 +289,7 @@
                             <span class="nav-text">Inventory</span>
                         </a>
                     </li>
-                    <li><a href="widget-basic.html" class="ai-icon" aria-expanded="false">
+                    <li><a href="<?=ROOT?>/signout?previousPageURL=<<?=ROOT?>/signout>" class="ai-icon" aria-expanded="false">
                             <i class="fas fa-sign-out-alt"></i> <!-- Updated icon for Sign Out -->
                             <span class="nav-text">Sign Out</span>
                         </a>
@@ -239,12 +361,12 @@
 
 					<div class="col-xl-9 col-xxl-12 mb-6">
                         <div>
-                            <div class="d-flex justify-content-end">       
+                            <div class="d-block d-sm-flex justify-content-end">       
                                 <a href="javascript:void(0)" class="btn btn-rounded btn-md btn-primary me-3 me-3 mb-3" style="width: 50%;">
                                     <i class="las la-download scale5 me-3"></i>Download Report</a>
                                 <a href="javascript:void(0)" class="btn btn-rounded btn-md btn-primary me-3 me-3 mb-3" style="width: 50%;"
                                 data-bs-toggle="modal" data-bs-target="#addExpense"><i class="las la-plus scale5 me-3"></i>Add Expense</a>
-                            </div>  
+                            </div>
 
                             <div class="card">
                                 <div class="card-header d-block d-sm-flex border-0">
@@ -267,33 +389,37 @@
                                         </ul>
                                     </div>
 
-                                    <div class="input-group exp-search-area mt-3 mt-sm-0">
+                                    <!-- <div class="input-group exp-search-area mt-3 mt-sm-0">
                                         <input type="date" class="form-control" placeholder="Select Date">
                                         <span class="input-group-text"><a href="javascript:void(0)"><i class="flaticon-381-search-2"></i></a></span>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="card-body tab-content p-0">
                                     <div class="tab-pane active show fade" id="monthly" role="tabpanel">
-                                        <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
-                                            <table id="expenses" class="table table-responsive-md card-table expenses-table">
+                                        <div class="table-responsive">
+                                            <table id="expenses-table-monthly" class="table table-responsive-md card-table expenses-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Expense ID</th>
+                                                        <th>Category</th>
+                                                        <th>Date</th>
+                                                        <th>Amount</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
                                                 <tbody>
+
                                                     <tr>
-                                                        <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
+                                                        <td>1</td>
                                                         <td>
                                                             <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">XYZ Store ID</a></h6>
-                                                            <span class="fs-14">Cashback</span>
                                                         </td>
                                                         <td>
                                                             <h6 class="fs-16 text-black font-w600 mb-0">June 4, 2020</h6>
                                                             <span class="fs-14">05:34:45 AM</span>
                                                         </td>
                                                         <td><span class="fs-16 text-black font-w600">+$5,553</span></td>
-                                                        <td style="text-align: right;">
+                                                        <td>
                                                             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                                                 Action
                                                             </button>
@@ -303,187 +429,38 @@
                                                             </ul>
                                                         </td>   
                                                     </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">XYZ Store ID</a></h6>
-                                                            <span class="fs-14">Cashback</span>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 text-black font-w600 mb-0">June 4, 2020</h6>
-                                                            <span class="fs-14">05:34:45 AM</span>
-                                                        </td>
-                                                        <td><span class="fs-16 text-black font-w600">+$5,553</span></td>
-                                                        <td style="text-align: right;">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                Action
-                                                            </button>
-                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-                                                            </ul>
-                                                        </td>   
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">XYZ Store ID</a></h6>
-                                                            <span class="fs-14">Cashback</span>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 text-black font-w600 mb-0">June 4, 2020</h6>
-                                                            <span class="fs-14">05:34:45 AM</span>
-                                                        </td>
-                                                        <td><span class="fs-16 text-black font-w600">+$5,553</span></td>
-                                                        <td style="text-align: right;">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                Action
-                                                            </button>
-                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-                                                            </ul>
-                                                        </td>   
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">Chef Renata</a></h6>
-                                                            <span class="fs-14">Transfer</span>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 text-black font-w600 mb-0">June 5, 2020</h6>
-                                                            <span class="fs-14">05:34:45 AM</span>
-                                                        </td>
-                                                        <td><span class="fs-16 text-black font-w600">-$167</span></td>
-                                                        <td style="text-align: right;">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                Action
-                                                            </button>
-                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">Cindy Alexandro</a></h6>
-                                                            <span class="fs-14">Transfer</span>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 text-black font-w600 mb-0">June 5, 2020</h6>
-                                                            <span class="fs-14">05:34:45 AM</span>
-                                                        </td>
-                                                        <td><span class="fs-16 text-black font-w600">+$5,553</span></td>
-                                                        <td style="text-align: right;">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                Action
-                                                            </button>
-                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">Paipal</a></h6>
-                                                            <span class="fs-14">Transfer</span>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 text-black font-w600 mb-0">June 4, 2020</h6>
-                                                            <span class="fs-14">05:34:45 AM</span>
-                                                        </td>
-                                                        <td><span class="fs-16 text-black font-w600">+$5,553</span></td>
-                                                        <td style="text-align: right;">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                Action
-                                                            </button>
-                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">Hawkins Jr.</a></h6>
-                                                            <span class="fs-14">Cashback</span>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 text-black font-w600 mb-0">June 4, 2020</h6>
-                                                            <span class="fs-14">05:34:45 AM</span>
-                                                        </td>
-                                                        <td><span class="fs-16 text-black font-w600">+$5,553</span></td>
-                                                        <td style="text-align: right;">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                Action
-                                                            </button>
-                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
+
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="Weekly" role="tabpanel">
                                         <div class="table-responsive">
-                                            <table id="expenses" class="table table-responsive-md card-table expenses-table">
-                                                <tbody>
+                                            <table id="expenses-table-weekly" class="table table-responsive-md card-table expenses-table">
+
+                                                <thead>
                                                     <tr>
-                                                        <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
+                                                        <th>Expense ID</th>
+                                                        <th>Category</th>
+                                                        <th>Date</th>
+                                                        <th>Amount</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+
+                                                    <tr>
+                                                        <td>1</td>
                                                         <td>
                                                             <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">XYZ Store ID</a></h6>
-                                                            <span class="fs-14">Cashback</span>
                                                         </td>
                                                         <td>
                                                             <h6 class="fs-16 text-black font-w600 mb-0">June 4, 2020</h6>
                                                             <span class="fs-14">05:34:45 AM</span>
                                                         </td>
                                                         <td><span class="fs-16 text-black font-w600">+$5,553</span></td>
-                                                        <td style="text-align: right;">
+                                                        <td>
                                                             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                                                 Action
                                                             </button>
@@ -491,137 +468,40 @@
                                                                 <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
                                                                 <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
                                                             </ul>
-                                                        </td>
+                                                        </td>   
                                                     </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">Chef Renata</a></h6>
-                                                            <span class="fs-14">Transfer</span>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 text-black font-w600 mb-0">June 5, 2020</h6>
-                                                            <span class="fs-14">05:34:45 AM</span>
-                                                        </td>
-                                                        <td><span class="fs-16 text-black font-w600">-$167</span></td>
-                                                        <td style="text-align: right;">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                Action
-                                                            </button>
-                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">Cindy Alexandro</a></h6>
-                                                            <span class="fs-14">Transfer</span>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 text-black font-w600 mb-0">June 5, 2020</h6>
-                                                            <span class="fs-14">05:34:45 AM</span>
-                                                        </td>
-                                                        <td><span class="fs-16 text-black font-w600">+$5,553</span></td>
-                                                        <td style="text-align: right;">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                Action
-                                                            </button>
-                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
+
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="Today" role="tabpanel">
                                         <div class="table-responsive">
-                                            <table id="expenses" class="table table-responsive-md card-table expenses-table">
+                                            <table id="expenses-table-today" class="table table-responsive-md card-table expenses-table">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th>Expense ID</th>
+                                                        <th>Category</th>
+                                                        <th>Date</th>
+                                                        <th>Amount</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+
                                                 <tbody>
+
                                                     <tr>
+                                                        <td>1</td>
                                                         <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">Chef Renata</a></h6>
-                                                            <span class="fs-14">Transfer</span>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 text-black font-w600 mb-0">June 5, 2020</h6>
-                                                            <span class="fs-14">05:34:45 AM</span>
-                                                        </td>
-                                                        <td><span class="fs-16 text-black font-w600">-$167</span></td>
-                                                        <td style="text-align: right;">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                Action
-                                                            </button>
-                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">Cindy Alexandro</a></h6>
-                                                            <span class="fs-14">Transfer</span>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 text-black font-w600 mb-0">June 5, 2020</h6>
-                                                            <span class="fs-14">05:34:45 AM</span>
-                                                        </td>
-                                                        <td><span class="fs-16 text-black font-w600">+$5,553</span></td>
-                                                        <td style="text-align: right;">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                Action
-                                                            </button>
-                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">Paipal</a></h6>
-                                                            <span class="fs-14">Transfer</span>
+                                                            <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">XYZ Store ID</a></h6>
                                                         </td>
                                                         <td>
                                                             <h6 class="fs-16 text-black font-w600 mb-0">June 4, 2020</h6>
                                                             <span class="fs-14">05:34:45 AM</span>
                                                         </td>
                                                         <td><span class="fs-16 text-black font-w600">+$5,553</span></td>
-                                                        <td style="text-align: right;">
+                                                        <td>
                                                             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                                                 Action
                                                             </button>
@@ -629,34 +509,9 @@
                                                                 <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
                                                                 <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
                                                             </ul>
-                                                        </td>
+                                                        </td>   
                                                     </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <svg class="bgl-success tr-icon" width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <g><path d="M35.2219 42.9875C34.8938 42.3094 35.1836 41.4891 35.8617 41.1609C37.7484 40.2531 39.3453 38.8422 40.4828 37.0758C41.6477 35.2656 42.2656 33.1656 42.2656 31C42.2656 24.7875 37.2125 19.7344 31 19.7344C24.7875 19.7344 19.7344 24.7875 19.7344 31C19.7344 33.1656 20.3523 35.2656 21.5117 37.0813C22.6437 38.8477 24.2461 40.2586 26.1328 41.1664C26.8109 41.4945 27.1008 42.3094 26.7727 42.993C26.4445 43.6711 25.6297 43.9609 24.9461 43.6328C22.6 42.5063 20.6148 40.7563 19.2094 38.5578C17.7656 36.3047 17 33.6906 17 31C17 27.2594 18.4547 23.743 21.1016 21.1016C23.743 18.4547 27.2594 17 31 17C34.7406 17 38.257 18.4547 40.8984 21.1016C43.5453 23.7484 45 27.2594 45 31C45 33.6906 44.2344 36.3047 42.7852 38.5578C41.3742 40.7508 39.3891 42.5063 37.0484 43.6328C36.3648 43.9555 35.55 43.6711 35.2219 42.9875Z" fill="#2BC155"></path><path d="M36.3211 31.7274C36.5891 31.9953 36.7203 32.3453 36.7203 32.6953C36.7203 33.0453 36.5891 33.3953 36.3211 33.6633L32.8812 37.1031C32.3781 37.6063 31.7109 37.8797 31.0055 37.8797C30.3 37.8797 29.6273 37.6008 29.1297 37.1031L25.6898 33.6633C25.1539 33.1274 25.1539 32.2633 25.6898 31.7274C26.2258 31.1914 27.0898 31.1914 27.6258 31.7274L29.6437 33.7453L29.6437 25.9742C29.6437 25.2196 30.2562 24.6071 31.0109 24.6071C31.7656 24.6071 32.3781 25.2196 32.3781 25.9742L32.3781 33.7508L34.3961 31.7328C34.9211 31.1969 35.7852 31.1969 36.3211 31.7274Z" fill="#2BC155"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 font-w600 mb-0"><a href="javascript:void(0);" class="text-black">Hawkins Jr.</a></h6>
-                                                            <span class="fs-14">Cashback</span>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="fs-16 text-black font-w600 mb-0">June 4, 2020</h6>
-                                                            <span class="fs-14">05:34:45 AM</span>
-                                                        </td>
-                                                        <td><span class="fs-16 text-black font-w600">+$5,553</span></td>
-                                                        <td style="text-align: right;">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                Action
-                                                            </button>
-                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -793,22 +648,56 @@
         Scripts
     ***********************************-->
     <!-- Required vendors -->
-    <script src="Dashboard/vendor/global/global.min.js"></script>
-	<script src="Dashboard/vendor/chart.js/Chart.bundle.min.js"></script>
-	<script src="Dashboard/vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+    <script src="<?=ROOT?>/assets/Dashboard/vendor/global/global.min.js"></script>
+	<script src="<?=ROOT?>/assets/Dashboard/vendor/chart.js/Chart.bundle.min.js"></script>
+	<script src="<?=ROOT?>/assets/Dashboard/vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
 	
 	<!-- Apex Chart -->
-	<script src="Dashboard/vendor/apexchart/apexchart.js"></script>
-	<script src="Dashboard/vendor/nouislider/nouislider.min.js"></script>
-	<script src="Dashboard/vendor/wnumb/wNumb.js"></script>
+	<script src="<?=ROOT?>/assets/Dashboard/vendor/apexchart/apexchart.js"></script>
+	<script src="<?=ROOT?>/assets/Dashboard/vendor/nouislider/nouislider.min.js"></script>
+	<script src="<?=ROOT?>/assets/Dashboard/vendor/wnumb/wNumb.js"></script>
 	
 	<!-- Dashboard 1 -->
-	<script src="Dashboard/js/dashboard/dashboard-1.js"></script>
+	<script src="<?=ROOT?>/assets/Dashboard/js/dashboard/dashboard-1.js"></script>
 
-    <script src="Dashboard/js/custom.min.js"></script>
-	<script src="Dashboard/js/dlabnav-init.js"></script>
-	<script src="Dashboard/js/demo.js"></script>
-    <script src="Dashboard/js/styleSwitcher.js"></script>
+    <script src="<?=ROOT?>/assets/Dashboard/js/custom.min.js"></script>
+	<script src="<?=ROOT?>/assets/Dashboard/js/dlabnav-init.js"></script>
+	<script src="<?=ROOT?>/assets/Dashboard/js/demo.js"></script>
+    <script src="<?=ROOT?>/assets/Dashboard/js/styleSwitcher.js"></script>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- DataTables JS CDN -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            function initializeDataTable(Etable) {
+                $(Etable).DataTable({
+                    "paging": true,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": true,
+                    "language": {
+                        "paginate": {
+                            "previous": "Previous",
+                            "next": "Next"
+                        },
+                        "lengthMenu": "Show _MENU_ entries"
+                    },
+                    "lengthMenu": [5, 10, 25, 50] // Define the entries options here
+                });
+            }
+
+            // Initialize DataTables for all specified tables
+            initializeDataTable('#expenses-table-monthly');
+            initializeDataTable('#expenses-table-weekly');
+            initializeDataTable('#expenses-table-today');
+        });
+    </script>
 
     <script>
 
@@ -846,7 +735,7 @@
                 merchDiv.style.display = "none";
             }
         });
-</script>
+    </script>
 	
 </body>
 
