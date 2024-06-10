@@ -26231,16 +26231,17 @@ table.dataTable tfoot th {
   align-items: center;
   display: flex;
   flex-flow: wrap; }
+  /* =======PAGINATION OURS==== */
   .dataTables_wrapper .dataTables_paginate .paginate_button.previous, .dataTables_wrapper .dataTables_paginate .paginate_button.next {
     margin-left: 0px;
-    font-size: 18px;
+    font-size: 16px;
     margin: 0 2px;
     border: 0 !important;
-    height: 50px;
-    width: 50px;
+    height: 25px;
+    width: 35px;
     padding: 0;
     border-radius: 1rem;
-    line-height: 54px;
+    /* line-height: 30px; */
     display: inline-block;
     color: var(--primary) !important; }
     .dataTables_wrapper .dataTables_paginate .paginate_button.previous i, .dataTables_wrapper .dataTables_paginate .paginate_button.next i {
@@ -26250,28 +26251,33 @@ table.dataTable tfoot th {
       background: var(--primary) !important; }
     .dataTables_wrapper .dataTables_paginate .paginate_button.previous.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.next.disabled {
       color: var(--primary) !important; }
+      /* == */
     @media only screen and (max-width: 575px) {
       .dataTables_wrapper .dataTables_paginate .paginate_button.previous, .dataTables_wrapper .dataTables_paginate .paginate_button.next {
-        height: 50px;
-        width: 50px;
-        line-height: 54px; } }
+        height: 25px;
+        width: 35px;
+     } }
+  /* =======PAGINATION OURS==== */
   .dataTables_wrapper .dataTables_paginate span .paginate_button {
-    height: 50px;
-    width: 50px;
+    height: 25px;
+    width: 25px;
     padding: 0;
     margin-left: 0px;
     margin: 0 2px;
-    line-height: 50px;
+    /* line-height: 30px; */
     text-align: center;
-    font-size: 18px;
-    border-radius: 1rem;
+    font-size: 16px;
+    border-radius: .5rem;
     color: var(--primary) !important;
-    border: 0 !important; }
+    border: 0 !important; 
+    /* display: inline-block; */
+}
+/* == */
     @media only screen and (max-width: 575px) {
       .dataTables_wrapper .dataTables_paginate span .paginate_button {
-        height: 50px;
-        width: 50px;
-        line-height: 50px; } }
+        height: 25px;
+        width: 25px;
+ } }
     .dataTables_wrapper .dataTables_paginate span .paginate_button.current, .dataTables_wrapper .dataTables_paginate span .paginate_button:hover {
       color: var(--primary) !important;
       background: #fff;
