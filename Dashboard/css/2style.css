@@ -26255,7 +26255,7 @@ table.dataTable tfoot th {
     @media only screen and (max-width: 575px) {
       .dataTables_wrapper .dataTables_paginate .paginate_button.previous, .dataTables_wrapper .dataTables_paginate .paginate_button.next {
         height: 25px;
-        width: 35px;
+        width: 30px;
      } }
   /* =======PAGINATION OURS==== */
   .dataTables_wrapper .dataTables_paginate span .paginate_button {
